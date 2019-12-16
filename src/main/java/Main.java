@@ -28,19 +28,15 @@ public class Main {
             CSVParser parser = new CSVParser(reader, CSVFormat.DEFAULT.withDelimiter(','));
             Iterator<CSVRecord> iterator = parser.iterator();
 
-            Map<String, Object> map;
-
             int id = 1;
             while (iterator.hasNext()) {
                 CSVRecord next = iterator.next();
-                map = new HashMap<>();
-                map.put("_id", id);
-                map.put("name", next.get(0).trim());
-                map.put("age", Integer.parseInt(next.get(1).trim()));
-
                 ArrayList<String> coursesList = new ArrayList<>(Arrays.asList(next.get(2).trim().split(",")));
-                map.put("courses", coursesList);
-                Document student = new Document(map);
+                Document student = new Document()
+                        .append("_id", id)
+                        .append("name", next.get(0).trim())
+                        .append("age", Integer.parseInt(next.get(1).trim()))
+                        .append("courses", coursesList);
 
                 mongoCollection.insertOne(student);
                 id++;
